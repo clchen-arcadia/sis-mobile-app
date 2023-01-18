@@ -7,6 +7,8 @@ void main() {
   runApp(MyApp());
 }
 
+const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -28,23 +30,23 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
+  // var current = WordPair.random();
 
-  void getNext() {
-    current = WordPair.random();
-    notifyListeners();
-  }
+  // void getNext() {
+  //   current = WordPair.random();
+  //   notifyListeners();
+  // }
 
-  var favorites = <WordPair>[];
+  // var favorites = <WordPair>[];
 
-  void toggleFavorite() {
-    if (favorites.contains(current)) {
-      favorites.remove(current);
-    } else {
-      favorites.add(current);
-    }
-    notifyListeners();
-  }
+  // void toggleFavorite() {
+  //   if (favorites.contains(current)) {
+  //     favorites.remove(current);
+  //   } else {
+  //     favorites.add(current);
+  //   }
+  //   notifyListeners();
+  // }
 }
 
 class MyHomePage extends StatefulWidget {
@@ -57,6 +59,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
+    String dropdownValue = list.first;
+
     Widget page;
     switch (selectedIndex) {
       case 0:
@@ -68,22 +73,130 @@ class _MyHomePageState extends State<MyHomePage> {
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
-    return Builder(builder: (context) {
-      return Scaffold(
-        body: Column(
-          children: [
-            Text("Test1"),
-            Text("Test2"),
-          ],
-        ),
-      );
-    });
+    var mainArea = ColoredBox(
+      color: colorScheme.surfaceVariant,
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 200),
+        child: page,
+      ),
+    );
+
+    return Scaffold(
+        appBar: AppBar(
+      title: const Text('Rithm SIS Mobile'),
+      actions: <Widget>[
+        IconButton(
+            icon: const Icon(Icons.home),
+            onPressed: () {},
+            tooltip: 'Show homepage'),
+        // IconButton(
+        //     icon: const Icon(Icons.dehaze_outlined),
+        //     onPressed: () {},
+        //     tooltip: 'Show homepage'),
+        DropdownButton(
+            value: dropdownValue,
+            icon: const Icon(Icons.dehaze_outlined),
+            items: list.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(value: value, child: Text(value));
+            }).toList(),
+            onChanged: (String? value) {
+              setState(() {
+                dropdownValue = value!;
+              });
+            })
+      ],
+    ));
+    //   body: LayoutBuilder(
+    //     builder: (context, constraints) {
+    //       if (constraints.maxWidth < 450) {
+    //         // Use a more mobile-friendly layout with BottomNavigationBar
+    //         // on narrow screens.
+    //         return Column(
+    //           children: [
+    //             Expanded(child: mainArea),
+    //             SafeArea(
+    //               child:
+    //               // child: BottomNavigationBar(
+    //               //   items: [
+    //               //     BottomNavigationBarItem(
+    //               //       icon: Icon(Icons.home),
+    //               //       label: 'Home',
+    //               //     ),
+    //               //     BottomNavigationBarItem(
+    //               //       icon: Icon(Icons.favorite),
+    //               //       label: 'Favorites',
+    //               //     ),
+    //               //   ],
+    //               //   currentIndex: selectedIndex,
+    //               //   onTap: (value) {
+    //               //     setState(() {
+    //               //       selectedIndex = value;
+    //               //     });
+    //               //   },
+    //               // ),
+    //             )
+    //           ],
+    //         );
+    //       // } else {
+    //       //   return Row(
+    //       //     children: [
+    //       //       SafeArea(
+    //       //         child: NavigationRail(
+    //       //           extended: constraints.maxWidth >= 600,
+    //       //           destinations: [
+    //       //             NavigationRailDestination(
+    //       //               icon: Icon(Icons.home),
+    //       //               label: Text('Home'),
+    //       //             ),
+    //       //             NavigationRailDestination(
+    //       //               icon: Icon(Icons.favorite),
+    //       //               label: Text('Favorites'),
+    //       //             ),
+    //       //           ],
+    //       //           selectedIndex: selectedIndex,
+    //       //           onDestinationSelected: (value) {
+    //       //             setState(() {
+    //       //               selectedIndex = value;
+    //       //             });
+    //       //           },
+    //       //         ),
+    //       //       ),
+    //       //       Expanded(child: mainArea),
+    //       //     ],
+    //       //   );
+    //       }
+    //     },
+    //   ),
+    // );
+    // }
   }
 }
 
 class CohortDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Text("CohortDetailPage Test");
+    var appState = context.watch<MyAppState>();
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(height: 10),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Rithm 28 Upcoming'),
+            ],
+          ),
+          SizedBox(width: 10),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Course: Sept - February'),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
