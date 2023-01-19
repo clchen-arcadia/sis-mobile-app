@@ -145,6 +145,13 @@ class DataClass extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime getDate(DateTime d) => DateTime(d.year, d.month, d.day);
+    DateTime today = DateTime.now();
+    DateTime startOfWeek =
+        getDate(today.subtract(Duration(days: today.weekday)));
+    DateTime endOfWeek = getDate(
+        today.add(Duration(days: DateTime.daysPerWeek - today.weekday)));
+
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: FittedBox(
@@ -173,34 +180,34 @@ class DataClass extends StatelessWidget {
             ),
           ],
           rows: datalist
-              .map(
-                (data) => DataRow(
-                  cells: [
-                    DataCell(
-                      Text(
-                        DateFormat('EEE, MM/dd h:mm a').format(data.startDate),
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    DataCell(
-                      Text(
-                        data.title,
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    DataCell(
-                      Text(
-                        data.type.toString(),
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ],
+              .where((data) => data.startDate.isAfter(startOfWeek))
+              .map((data) {
+            return DataRow(
+              cells: [
+                DataCell(
+                  Text(
+                    DateFormat('EEE, MM/dd h:mm a').format(data.startAt),
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.w500),
+                  ),
                 ),
-              )
-              .toList(),
+                DataCell(
+                  Text(
+                    data.title,
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.w500),
+                  ),
+                ),
+                DataCell(
+                  Text(
+                    data.type.toString(),
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ],
+            );
+          }).toList(),
         ),
       ),
     );
