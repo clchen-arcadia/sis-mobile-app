@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'api_service.dart';
-import 'api_models.dart';
+import 'models/services/api_service.dart';
+import 'models/curriculum-items.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,22 +16,81 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: MaterialApp(
-        title: 'SIS Mobile App',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: Color.fromARGB(255, 228, 107, 102)),
+    Widget titleSection = Container(
+        padding: const EdgeInsets.all(32),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: const Text(
+                        'Rithm 28 / Upcoming / Breadcrumbs',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 160, 159, 159),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      'Rithm 28 Header',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ]),
+            )
+          ],
+        ));
+    Column _buildButtonColumn(Color color, IconData icon, String label) {
+      return Column(children: [
+        ElevatedButton.icon(
+          onPressed: () {
+            print('Pressed button $label');
+          },
+          icon: Icon(icon, color: color),
+          label: Text(label,
+              style: TextStyle(
+                  color: color, fontWeight: FontWeight.w400, fontSize: 12)),
         ),
-        home: MyHomePage(),
+      ]);
+    }
+
+    //  ElevatedButton.icon(
+    //           onPressed: () {
+    //             print("pressed button 2");
+    //           },
+    //           icon: Icon(Icons.videocam),
+    //           label: Text('Video meeting'),
+    //         ),
+
+    Color color = Theme.of(context).primaryColor;
+
+    Widget buttonSection = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildButtonColumn(color, Icons.calendar_month, 'CALENDAR'),
+        _buildButtonColumn(color, Icons.videocam, 'ZOOM'),
+      ],
+    );
+
+    return MaterialApp(
+      title: 'SIS Mobile App',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 228, 107, 102)),
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('{R} Rithm'),
+        ),
+        body: ListView(
+          children: [titleSection, buttonSection],
+        ),
       ),
     );
   }
 }
-
-class MyAppState extends ChangeNotifier {}
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -57,14 +116,6 @@ class _MyHomePageState extends State<MyHomePage> {
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
-
-    var mainArea = ColoredBox(
-      color: colorScheme.surfaceVariant,
-      child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 200),
-        child: page,
-      ),
-    );
 
     return Scaffold(
       appBar: AppBar(
