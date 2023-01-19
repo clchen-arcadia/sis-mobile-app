@@ -1,6 +1,8 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
+// import 'package:intl/date_symbol_data_file.dart';
+import 'package:intl/intl.dart';
 import 'services/api_service.dart';
 import 'models/curriculum-items.dart';
 
@@ -176,7 +178,7 @@ class DataClass extends StatelessWidget {
                   cells: [
                     DataCell(
                       Text(
-                        data.startDate.toString(),
+                        DateFormat('EEE, MM/dd h:mm a').format(data.startDate),
                         style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w500),
                       ),
