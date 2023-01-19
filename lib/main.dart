@@ -92,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
               }),
         ],
       ),
-      body: mainArea,
+      body: CohortDetailPage(),
     );
   }
 }
@@ -115,74 +115,81 @@ class _CohortDetailPageState extends State<CohortDetailPage> {
   Widget build(BuildContext context) {
     // var appState = context.watch<MyAppState>();
 
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(height: 25),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(width: 25),
-              Text('Rithm 28 / Upcoming / breadcrumbs'),
-            ],
-          ),
-          SizedBox(width: 10),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(width: 25),
-              Text('Rithm 28 Upcoming Header'),
-            ],
-          ),
-          SizedBox(width: 10),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(width: 25),
-              ElevatedButton.icon(
-                onPressed: () {
-                  print("pressed button 1");
-                },
-                icon: Icon(Icons.calendar_month),
-                label: Text('Calendar'),
-              ),
-              ElevatedButton.icon(
-                onPressed: () {
-                  print("pressed button 2");
-                },
-                icon: Icon(Icons.videocam),
-                label: Text('Video meeting'),
-              ),
-            ],
-          ),
-          SizedBox(width: 10),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(width: 25),
-              Text('Course: Sept - February / Course Info'),
-            ],
-          ),
-          SizedBox(width: 10),
-          FutureBuilder<List<CurriculumItems>>(
-            future: futureCurriculumItems,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Container(
-                    padding: const EdgeInsets.all(5),
-                    child: DataClass(
-                        datalist: snapshot.data as List<CurriculumItems>));
-                // return Text(
-                //     'Curriculum Items: ${snapshot.data?.length.toString()}');
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-              return const CircularProgressIndicator();
-            },
-          ),
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SizedBox(width: 25),
+            Text('Rithm 28 / Upcoming / breadcrumbs'),
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SizedBox(width: 25),
+            Text('Rithm 28 Upcoming Header'),
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SizedBox(width: 25),
+            ElevatedButton.icon(
+              onPressed: () {
+                print("pressed button 1");
+              },
+              icon: Icon(Icons.calendar_month),
+              label: Text('Calendar'),
+            ),
+            ElevatedButton.icon(
+              onPressed: () {
+                print("pressed button 2");
+              },
+              icon: Icon(Icons.videocam),
+              label: Text('Video meeting'),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SizedBox(width: 25),
+            Text('Course: Sept - February / Course Info'),
+          ],
+        ),
+        FutureCurric(futureCurriculumItems: futureCurriculumItems),
+      ],
+    );
+  }
+}
+
+class FutureCurric extends StatelessWidget {
+  const FutureCurric({
+    Key? key,
+    required this.futureCurriculumItems,
+  }) : super(key: key);
+
+  final Future<List<CurriculumItems>> futureCurriculumItems;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<CurriculumItems>>(
+      future: futureCurriculumItems,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Container(
+              padding: const EdgeInsets.all(5),
+              child:
+                  DataClass(datalist: snapshot.data as List<CurriculumItems>));
+          // return Text(
+          //     'Curriculum Items: ${snapshot.data?.length.toString()}');
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        return const CircularProgressIndicator();
+      },
     );
   }
 }
