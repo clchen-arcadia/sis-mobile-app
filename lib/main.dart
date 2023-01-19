@@ -2,6 +2,7 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'api_service.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,25 +30,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyAppState extends ChangeNotifier {
-  // var current = WordPair.random();
-
-  // void getNext() {
-  //   current = WordPair.random();
-  //   notifyListeners();
-  // }
-
-  // var favorites = <WordPair>[];
-
-  // void toggleFavorite() {
-  //   if (favorites.contains(current)) {
-  //     favorites.remove(current);
-  //   } else {
-  //     favorites.add(current);
-  //   }
-  //   notifyListeners();
-  // }
-}
+class MyAppState extends ChangeNotifier {}
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -56,6 +39,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var selectedIndex = 0;
+
+  late Future<AssessmentSessionList> futureAssessmentSessionList;
+
+  @override
+  void initState() {
+    super.initState();
+    futureAssessmentSessionList = fetchAssessmentSessionList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -199,6 +190,7 @@ class CohortDetailPage extends StatelessWidget {
     );
   }
 }
+
 
 
 
