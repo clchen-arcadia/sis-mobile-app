@@ -15,10 +15,13 @@ class ApiConstants {
 Future<List<CurriculumItems>> fetchCurriculumItems() async {
   print('Before request');
   final response = await http.get(
-    Uri.parse('http://localhost:8000/api/cohortitems/'),
+    // Uri.parse('http://localhost:8000/api/cohortitems/' //Trevor
+    Uri.parse('http://r99:8000/api/cohortitems/' //Chris
+        ),
     headers: {
       HttpHeaders.authorizationHeader:
-          'Token 57113e449ac123cfef1d2b72be0d3df512c64449'
+          // 'Token 57113e449ac123cfef1d2b72be0d3df512c64449' //Trevor
+          'Token 3b191a48b9451690b40150d68092ceedb8c31ebc' //Chris
     },
   );
   print('after request');
