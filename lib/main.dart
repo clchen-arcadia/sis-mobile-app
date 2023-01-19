@@ -40,14 +40,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var selectedIndex = 0;
 
-  late Future<AssessmentSessionList> futureAssessmentSessionList;
-
-  @override
-  void initState() {
-    super.initState();
-    futureAssessmentSessionList = fetchAssessmentSessionList();
-  }
-
   @override
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
@@ -104,10 +96,23 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class CohortDetailPage extends StatelessWidget {
+class CohortDetailPage extends StatefulWidget {
+  @override
+  State<CohortDetailPage> createState() => _CohortDetailPageState();
+}
+
+class _CohortDetailPageState extends State<CohortDetailPage> {
+  late Future<AssessmentSessionList> futureAssessmentSessionList;
+
+  @override
+  void initState() {
+    super.initState();
+    futureAssessmentSessionList = fetchAssessmentSessionList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
+    // var appState = context.watch<MyAppState>();
 
     return Center(
       child: Column(
@@ -159,6 +164,19 @@ class CohortDetailPage extends StatelessWidget {
             ],
           ),
           SizedBox(width: 10),
+          FutureBuilder<AssessmentSessionList>(
+            future: futureAssessmentSessionList,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(snapshot.data!.count.toString());
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+              return const CircularProgressIndicator();
+            },
+          ),
+
+          // Text('count:' + futureAssessmentSessionList),
           DataTable(columns: const <DataColumn>[
             DataColumn(
               label: Expanded(
