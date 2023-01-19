@@ -1,3 +1,5 @@
+// import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'api_service.dart';
@@ -167,43 +169,87 @@ class _CohortDetailPageState extends State<CohortDetailPage> {
             future: futureCurriculumItems,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Text(
-                    'Curriculum Items: ${snapshot.data?.length.toString()}');
+                return Container(
+                    padding: const EdgeInsets.all(5),
+                    child: DataClass(
+                        datalist: snapshot.data as List<CurriculumItems>));
+                // return Text(
+                //     'Curriculum Items: ${snapshot.data?.length.toString()}');
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
               return const CircularProgressIndicator();
             },
           ),
-
-          // Text('count:' + futureAssessmentSessionList),
-          DataTable(columns: const <DataColumn>[
-            DataColumn(
-              label: Expanded(
-                child: Text(
-                  'Date',
-                  style: TextStyle(),
-                ),
-              ),
-            ),
-            DataColumn(
-              label: Expanded(
-                child: Text(
-                  'Title',
-                  style: TextStyle(),
-                ),
-              ),
-            ),
-            DataColumn(
-              label: Expanded(
-                child: Text(
-                  'Assets',
-                  style: TextStyle(),
-                ),
-              ),
-            ),
-          ], rows: []),
         ],
+      ),
+    );
+  }
+}
+
+class DataClass extends StatelessWidget {
+  const DataClass({Key? key, required this.datalist}) : super(key: key);
+  final List<CurriculumItems> datalist;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: FittedBox(
+        child: DataTable(
+          sortColumnIndex: 1,
+          showCheckboxColumn: false,
+          // border: TableBorder.all(width: .5),
+          columns: const [
+            DataColumn(
+              label: Text(
+                "Date",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                "Title",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            DataColumn(
+              label: Text(
+                "Assets",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+          rows: datalist
+              .map(
+                (data) => DataRow(
+                  cells: [
+                    DataCell(
+                      Text(
+                        data.startDate.toString(),
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    DataCell(
+                      Text(
+                        data.title,
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    DataCell(
+                      Text(
+                        data.type.toString(),
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+              .toList(),
+        ),
       ),
     );
   }
