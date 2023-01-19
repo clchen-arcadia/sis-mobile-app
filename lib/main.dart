@@ -1,8 +1,7 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 import 'api_service.dart';
+import 'api_models.dart';
 
 void main() {
   runApp(MyApp());
@@ -102,12 +101,12 @@ class CohortDetailPage extends StatefulWidget {
 }
 
 class _CohortDetailPageState extends State<CohortDetailPage> {
-  late Future<AssessmentSessionList> futureAssessmentSessionList;
+  late Future<List<CurriculumItems>> futureCurriculumItems;
 
   @override
   void initState() {
     super.initState();
-    futureAssessmentSessionList = fetchAssessmentSessionList();
+    futureCurriculumItems = fetchCurriculumItems();
   }
 
   @override
@@ -164,11 +163,12 @@ class _CohortDetailPageState extends State<CohortDetailPage> {
             ],
           ),
           SizedBox(width: 10),
-          FutureBuilder<AssessmentSessionList>(
-            future: futureAssessmentSessionList,
+          FutureBuilder<List<CurriculumItems>>(
+            future: futureCurriculumItems,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Text('Assessments: ${snapshot.data!.count.toString()}');
+                return Text(
+                    'Curriculum Items: ${snapshot.data?.length.toString()}');
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
