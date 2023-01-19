@@ -12,7 +12,8 @@ class ApiConstants {
   static String baseUrl = dotenv.env['API_BASE_URL'].toString();
   static String token = dotenv.env['API_TOKEN'].toString();
   static String cohortItems = 'cohortitems/';
-  static String cohortEndpoint = 'cohorts/';
+  static String cohortData = 'cohorts/';
+  static String cohort = 'r99/';
 }
 
 // Fetch Curriculum Items for current Cohort
@@ -35,7 +36,16 @@ Future<List<CurriculumItems>> fetchCurriculumItems() async {
 }
 
 // Fetch Data about current Cohort
-// fetchCohortData() async {
-//   print('Fetching Cohort');
-//   final response = await http.get()
-// }
+Future<Cohort> fetchCohortData() async {
+  print('Fetching Cohort');
+  final response = await http.get(
+    Uri.parse(
+        ApiConstants.baseUrl + ApiConstants.cohortData + ApiConstants.cohort),
+    headers: {HttpHeaders.authorizationHeader: ApiConstants.token},
+  );
+  if (response.statusCode == 200) {
+    return cohortFromJson(response.body);
+  } else {
+    throw Exception('Failed to load Cohort Data');
+  }
+}
