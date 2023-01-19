@@ -1,10 +1,13 @@
 // import 'dart:html';
+// import 'dart:ffi';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 // import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 import 'services/api_service.dart';
 import 'models/curriculum-items.dart';
+import 'models/cohort.dart';
 
 Future main() async {
   await dotenv.load();
@@ -15,7 +18,7 @@ Future main() async {
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -94,10 +97,12 @@ class CohortDetailPage extends StatefulWidget {
 
 class _CohortDetailPageState extends State<CohortDetailPage> {
   late Future<List<CurriculumItems>> futureCurriculumItems;
+  late Future<Cohort> futureCohortData;
 
   @override
   void initState() {
     super.initState();
+    futureCohortData = fetchCohortData();
     futureCurriculumItems = fetchCurriculumItems();
   }
 
@@ -108,6 +113,21 @@ class _CohortDetailPageState extends State<CohortDetailPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        FutureBuilder<Cohort>(
+          future: futureCohortData,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Container(
+                  padding: const EdgeInsets.all(5),
+                  child: Text(
+                    'Course: ${snapshot.data!.id}',
+                  ));
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+            return const CircularProgressIndicator();
+          },
+        ),
         FutureCurric(futureCurriculumItems: futureCurriculumItems),
       ],
     );
