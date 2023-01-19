@@ -1,8 +1,7 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'models/services/api_service.dart';
+import 'services/api_service.dart';
 import 'models/curriculum-items.dart';
 
 void main() {
@@ -55,14 +54,6 @@ class MyApp extends StatelessWidget {
       ]);
     }
 
-    //  ElevatedButton.icon(
-    //           onPressed: () {
-    //             print("pressed button 2");
-    //           },
-    //           icon: Icon(Icons.videocam),
-    //           label: Text('Video meeting'),
-    //         ),
-
     Color color = Theme.of(context).primaryColor;
 
     Widget buttonSection = Row(
@@ -85,65 +76,9 @@ class MyApp extends StatelessWidget {
           title: const Text('{R} Rithm'),
         ),
         body: ListView(
-          children: [titleSection, buttonSection],
+          children: [titleSection, buttonSection, CohortDetailPage()],
         ),
       ),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  var selectedIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    var colorScheme = Theme.of(context).colorScheme;
-    String dropdownValue = list.first;
-
-    Widget page;
-    switch (selectedIndex) {
-      case 0:
-        page = CohortDetailPage();
-        break;
-      case 1:
-        page = Placeholder();
-        break;
-      default:
-        throw UnimplementedError('no widget for $selectedIndex');
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Rithm SIS Mobile'),
-        actions: <Widget>[
-          IconButton(
-              icon: const Icon(Icons.home),
-              onPressed: () {},
-              tooltip: 'Show homepage'),
-          // IconButton(
-          //     icon: const Icon(Icons.dehaze_outlined),
-          //     onPressed: () {},
-          //     tooltip: 'Show homepage'),
-          DropdownButton(
-              value: dropdownValue,
-              icon: const Icon(Icons.dehaze_outlined),
-              items: list.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                    value: value, child: Text(value));
-              }).toList(),
-              onChanged: (String? value) {
-                setState(() {
-                  dropdownValue = value!;
-                });
-              }),
-        ],
-      ),
-      body: CohortDetailPage(),
     );
   }
 }
@@ -169,47 +104,6 @@ class _CohortDetailPageState extends State<CohortDetailPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            SizedBox(width: 25),
-            Text('Rithm 28 / Upcoming / breadcrumbs'),
-          ],
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            SizedBox(width: 25),
-            Text('Rithm 28 Upcoming Header'),
-          ],
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            SizedBox(width: 25),
-            ElevatedButton.icon(
-              onPressed: () {
-                print("pressed button 1");
-              },
-              icon: Icon(Icons.calendar_month),
-              label: Text('Calendar'),
-            ),
-            ElevatedButton.icon(
-              onPressed: () {
-                print("pressed button 2");
-              },
-              icon: Icon(Icons.videocam),
-              label: Text('Video meeting'),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            SizedBox(width: 25),
-            Text('Course: Sept - February / Course Info'),
-          ],
-        ),
         FutureCurric(futureCurriculumItems: futureCurriculumItems),
       ],
     );
@@ -231,11 +125,9 @@ class FutureCurric extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Container(
-              padding: const EdgeInsets.all(5),
-              child:
-                  DataClass(datalist: snapshot.data as List<CurriculumItems>));
-          // return Text(
-          //     'Curriculum Items: ${snapshot.data?.length.toString()}');
+            padding: const EdgeInsets.all(5),
+            child: DataClass(datalist: snapshot.data as List<CurriculumItems>),
+          );
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
@@ -312,71 +204,3 @@ class DataClass extends StatelessWidget {
     );
   }
 }
-
-
-
-
-/// =======
-///     //   body: LayoutBuilder(
-    //     builder: (context, constraints) {
-    //       if (constraints.maxWidth < 450) {
-    //         // Use a more mobile-friendly layout with BottomNavigationBar
-    //         // on narrow screens.
-    //         return Column(
-    //           children: [
-    //             Expanded(child: mainArea),
-    //             SafeArea(
-    //               child:
-    //               // child: BottomNavigationBar(
-    //               //   items: [
-    //               //     BottomNavigationBarItem(
-    //               //       icon: Icon(Icons.home),
-    //               //       label: 'Home',
-    //               //     ),
-    //               //     BottomNavigationBarItem(
-    //               //       icon: Icon(Icons.favorite),
-    //               //       label: 'Favorites',
-    //               //     ),
-    //               //   ],
-    //               //   currentIndex: selectedIndex,
-    //               //   onTap: (value) {
-    //               //     setState(() {
-    //               //       selectedIndex = value;
-    //               //     });
-    //               //   },
-    //               // ),
-    //             )
-    //           ],
-    //         );
-    //       // } else {
-    //       //   return Row(
-    //       //     children: [
-    //       //       SafeArea(
-    //       //         child: NavigationRail(
-    //       //           extended: constraints.maxWidth >= 600,
-    //       //           destinations: [
-    //       //             NavigationRailDestination(
-    //       //               icon: Icon(Icons.home),
-    //       //               label: Text('Home'),
-    //       //             ),
-    //       //             NavigationRailDestination(
-    //       //               icon: Icon(Icons.favorite),
-    //       //               label: Text('Favorites'),
-    //       //             ),
-    //       //           ],
-    //       //           selectedIndex: selectedIndex,
-    //       //           onDestinationSelected: (value) {
-    //       //             setState(() {
-    //       //               selectedIndex = value;
-    //       //             });
-    //       //           },
-    //       //         ),
-    //       //       ),
-    //       //       Expanded(child: mainArea),
-    //       //     ],
-    //       //   );
-    //       }
-    //     },
-    //   ),
-    // );
-    // }
