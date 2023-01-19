@@ -168,7 +168,7 @@ class _CohortDetailPageState extends State<CohortDetailPage> {
             future: futureAssessmentSessionList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Text(snapshot.data!.count.toString());
+                return Text('Assessments: ${snapshot.data!.count.toString()}');
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
