@@ -1,12 +1,14 @@
 // import 'dart:html';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 // import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 import 'services/api_service.dart';
 import 'models/curriculum-items.dart';
 
-void main() {
+Future main() async {
+  await dotenv.load();
+
   runApp(MyApp());
 }
 
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Rithm 28 Header',
+                      'Rithm r28 Upcoming',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ]),
