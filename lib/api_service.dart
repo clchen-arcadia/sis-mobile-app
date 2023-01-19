@@ -31,9 +31,9 @@ Future<AssessmentSessionList> fetchAssessmentSessionList() async {
 }
 
 class AssessmentSessionList {
-  final int count;
-  final dynamic next;
-  final dynamic previous;
+  final int? count;
+  final String? next;
+  final String? previous;
   final List<dynamic> results;
 
   const AssessmentSessionList({
