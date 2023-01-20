@@ -130,36 +130,48 @@ class _CohortDetailPageState extends State<CohortDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    // var appState = context.watch<MyAppState>();
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FutureBuilder<Cohort>(
-          future: futureCohortData,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Container(
-                  padding: const EdgeInsets.all(5),
-                  child: Text('Course: [Mon, Sep 26, 2022 - Fri, Feb 3, 2023]',
-                      style: TextStyle(
-                        fontSize: 18,
-                      )));
-            } else if (snapshot.hasError) {
-              return Text('${snapshot.error}');
-            }
-            return const CircularProgressIndicator();
-          },
-        ),
-        FutureCurric(futureCurriculumItems: futureCurriculumItems),
+        FutureCourseInfo(futureCohortData: futureCohortData),
+        FutureCurriculumItems(futureCurriculumItems: futureCurriculumItems),
       ],
     );
   }
 }
 
-class FutureCurric extends StatelessWidget {
-  const FutureCurric({
+class FutureCourseInfo extends StatelessWidget {
+  const FutureCourseInfo({
+    Key? key,
+    required this.futureCohortData,
+  }) : super(key: key);
+
+  final Future<Cohort> futureCohortData;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Cohort>(
+      future: futureCohortData,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Container(
+              padding: const EdgeInsets.all(25),
+              child: Text('Course: [Mon, Sep 26, 2022 - Fri, Feb 3, 2023]',
+                  style: TextStyle(
+                    fontSize: 18,
+                  )));
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+}
+
+class FutureCurriculumItems extends StatelessWidget {
+  const FutureCurriculumItems({
     Key? key,
     required this.futureCurriculumItems,
   }) : super(key: key);
@@ -168,13 +180,22 @@ class FutureCurric extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime getDate(DateTime d) => DateTime(d.year, d.month, d.day);
+    DateTime today = DateTime.now();
+    DateTime startOfWeek =
+        getDate(today.subtract(Duration(days: today.weekday)));
+    // DateTime endOfWeek = getDate(
+    //     today.add(Duration(days: DateTime.daysPerWeek - today.weekday)));
+
     return FutureBuilder<List<CurriculumItems>>(
       future: futureCurriculumItems,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Container(
-            padding: const EdgeInsets.all(5),
-            child: DataClass(datalist: snapshot.data as List<CurriculumItems>),
+          return Column(
+            children: snapshot.data!
+                .where((data) => data.startDate.isAfter(startOfWeek))
+                .map((data) => CurricItem(data: data))
+                .toList(),
           );
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
@@ -185,119 +206,98 @@ class FutureCurric extends StatelessWidget {
   }
 }
 
-class DataClass extends StatelessWidget {
-  const DataClass({Key? key, required this.datalist}) : super(key: key);
-  final List<CurriculumItems> datalist;
+class CurricItem extends StatelessWidget {
+  const CurricItem({Key? key, required this.data}) : super(key: key);
+  final CurriculumItems data;
 
   @override
   Widget build(BuildContext context) {
-    DateTime getDate(DateTime d) => DateTime(d.year, d.month, d.day);
-    DateTime today = DateTime.now();
-    DateTime startOfWeek =
-        getDate(today.subtract(Duration(days: today.weekday)));
-    DateTime endOfWeek = getDate(
-        today.add(Duration(days: DateTime.daysPerWeek - today.weekday)));
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(
-        children: [
-              Row(children: [
-                Expanded(
-                  flex: 3,
-                  child: Text(
-                    "Date",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 8,
-                  child: Text(
-                    "Title",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    "Assets",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ]),
-              Divider(
-                height: 0,
-                thickness: 2,
-                color: Colors.black,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 2,
+          child: Text(
+            DateFormat('EEE, MM/dd h:mm a').format(data.startAt),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          ),
+        ),
+        Expanded(
+          flex: 8,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                data.title,
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 30, 33, 222)),
               ),
-            ] +
-            datalist
-                .where((data) => data.startDate.isAfter(startOfWeek))
-                .map((data) {
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Text(
-                      DateFormat('EEE, MM/dd h:mm a').format(data.startAt),
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 8,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          data.title,
-                          style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 30, 33, 222)),
-                        ),
-                        Text(
-                          "(${data.getTypeDisplayString()})",
-                          style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey),
-                        ),
-                        Text(
-                          data.description,
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      "", // TODO: display the assets here as clickable icons
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  Divider(
-                    height: 8,
-                    thickness: 5,
-                    color: Colors.grey,
-                  ),
-                ],
-              );
-            }).toList(),
-      ),
+              Text(
+                "(${data.getTypeDisplayString()})",
+                style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey),
+              ),
+              Text(
+                data.description,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+        // Expanded(
+        //   flex: 1,
+        //   child: Text(
+        //     "", // TODO: display the assets here as clickable icons
+        //     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+        //   ),
+        // ),
+      ],
     );
   }
 }
+
+
+
+          //   Row(children: [
+          //     Expanded(
+          //       flex: 3,
+          //       child: Text(
+          //         "Date",
+          //         style: TextStyle(
+          //           fontSize: 18,
+          //           fontWeight: FontWeight.bold,
+          //         ),
+          //       ),
+          //     ),
+          //     Expanded(
+          //       flex: 8,
+          //       child: Text(
+          //         "Title",
+          //         style: TextStyle(
+          //           fontSize: 18,
+          //           fontWeight: FontWeight.bold,
+          //         ),
+          //       ),
+          //     ),
+          //     Expanded(
+          //       flex: 2,
+          //       child: Text(
+          //         "Assets",
+          //         style: TextStyle(
+          //           fontSize: 18,
+          //           fontWeight: FontWeight.bold,
+          //         ),
+          //       ),
+          //     ),
+          //   ]),
+          //   Divider(
+          //     height: 0,
+          //     thickness: 2,
+          //     color: Colors.black,
+          //   ),
+          // ] +
