@@ -17,47 +17,32 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget titleSection = Container(
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: const Text(
-                        'Rithm 28 / Upcoming',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 160, 159, 159),
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          'Rithm r28 ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 32,
-                          ),
-                        ),
-                        Text(
-                          'Upcoming',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 124, 122, 122),
-                            fontSize: 25,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ]),
-            )
-          ],
-        ));
-    Column _buildButtonColumn(Color color, IconData icon, String label) {
+    Widget titleSection =
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Breadcrumbs(),
+      Row(
+        children: [
+          Text(
+            'Rithm r28 ',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 32,
+            ),
+          ),
+          Text(
+            'Upcoming',
+            style: TextStyle(
+              color: Color.fromARGB(255, 124, 122, 122),
+              fontSize: 25,
+            ),
+          ),
+        ],
+      ),
+    ]);
+
+    Column createButton(IconData icon, String label) {
+      Color color = Theme.of(context).primaryColor;
+
       return Column(children: [
         ElevatedButton.icon(
           onPressed: () {
@@ -71,13 +56,11 @@ class MyApp extends StatelessWidget {
       ]);
     }
 
-    Color color = Theme.of(context).primaryColor;
-
     Widget buttonSection = Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _buildButtonColumn(color, Icons.calendar_month, 'CALENDAR'),
-        _buildButtonColumn(color, Icons.videocam, 'ZOOM'),
+        createButton(Icons.calendar_month, 'CALENDAR'),
+        createButton(Icons.videocam, 'ZOOM'),
       ],
     );
 
@@ -92,6 +75,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 228, 107, 102),
           title: const Text('{R} Rithm'),
           centerTitle: false,
           actions: [
@@ -105,12 +89,32 @@ class MyApp extends StatelessWidget {
           ],
         ),
         body: ListView(
+          padding: const EdgeInsets.all(25),
           children: [titleSection, buttonSection, CohortDetailPage()],
         ),
       ),
     );
   }
 }
+
+class Breadcrumbs extends StatelessWidget {
+  const Breadcrumbs({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text(
+      'Rithm 28 / Upcoming',
+      style: TextStyle(
+        color: Color.fromARGB(255, 160, 159, 159),
+        fontSize: 18,
+      ),
+    );
+  }
+}
+
+////////////////////////////////////////////////////////////////////////
 
 class CohortDetailPage extends StatefulWidget {
   @override
@@ -131,11 +135,44 @@ class _CohortDetailPageState extends State<CohortDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         FutureCourseInfo(futureCohortData: futureCohortData),
+        CurriculumItemsHeader(),
         FutureCurriculumItems(futureCurriculumItems: futureCurriculumItems),
+      ],
+    );
+  }
+}
+
+class CurriculumItemsHeader extends StatelessWidget {
+  const CurriculumItemsHeader({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child: Text(
+            "Date",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 8,
+          child: Text(
+            "Title",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -156,7 +193,7 @@ class FutureCourseInfo extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Container(
-              padding: const EdgeInsets.all(25),
+              padding: const EdgeInsets.all(5),
               child: Text('Course: [Mon, Sep 26, 2022 - Fri, Feb 3, 2023]',
                   style: TextStyle(
                     fontSize: 18,
@@ -249,55 +286,7 @@ class CurricItem extends StatelessWidget {
             ],
           ),
         ),
-        // Expanded(
-        //   flex: 1,
-        //   child: Text(
-        //     "", // TODO: display the assets here as clickable icons
-        //     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-        //   ),
-        // ),
       ],
     );
   }
 }
-
-
-
-          //   Row(children: [
-          //     Expanded(
-          //       flex: 3,
-          //       child: Text(
-          //         "Date",
-          //         style: TextStyle(
-          //           fontSize: 18,
-          //           fontWeight: FontWeight.bold,
-          //         ),
-          //       ),
-          //     ),
-          //     Expanded(
-          //       flex: 8,
-          //       child: Text(
-          //         "Title",
-          //         style: TextStyle(
-          //           fontSize: 18,
-          //           fontWeight: FontWeight.bold,
-          //         ),
-          //       ),
-          //     ),
-          //     Expanded(
-          //       flex: 2,
-          //       child: Text(
-          //         "Assets",
-          //         style: TextStyle(
-          //           fontSize: 18,
-          //           fontWeight: FontWeight.bold,
-          //         ),
-          //       ),
-          //     ),
-          //   ]),
-          //   Divider(
-          //     height: 0,
-          //     thickness: 2,
-          //     color: Colors.black,
-          //   ),
-          // ] +
