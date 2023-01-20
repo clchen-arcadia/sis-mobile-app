@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
       ),
     ]);
 
+    // Constructs a single button. Accepts icon, label
     Column createButton(IconData icon, String label) {
       Color color = Colors.black54;
 
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
       ]);
     }
 
+    // Constructs row for buttons.
     Widget buttonSection = Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -96,6 +98,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// TODO: Make functional.
 class Breadcrumbs extends StatelessWidget {
   const Breadcrumbs({
     Key? key,
@@ -147,6 +150,8 @@ class _CohortDetailPageState extends State<CohortDetailPage> {
     );
   }
 }
+
+//TODO: Move state up for usage in upper levels.
 
 class FutureCourseInfo extends StatelessWidget {
   const FutureCourseInfo({
@@ -258,6 +263,8 @@ class FutureCurriculumItems extends StatelessWidget {
     );
   }
 }
+
+// Constructs a single Row for listView display
 
 class CurricItem extends StatelessWidget {
   const CurricItem({Key? key, required this.data}) : super(key: key);
