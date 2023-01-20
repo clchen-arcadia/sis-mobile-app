@@ -31,17 +31,14 @@ class MyApp extends StatelessWidget {
           ),
           Text(
             'Upcoming',
-            style: TextStyle(
-              color: Color.fromARGB(255, 124, 122, 122),
-              fontSize: 25,
-            ),
+            style: TextStyle(fontWeight: FontWeight.w100, fontSize: 25),
           ),
         ],
       ),
     ]);
 
     Column createButton(IconData icon, String label) {
-      Color color = Theme.of(context).primaryColor;
+      Color color = Colors.black54;
 
       return Column(children: [
         ElevatedButton.icon(
@@ -49,9 +46,11 @@ class MyApp extends StatelessWidget {
             print('Pressed button $label');
           },
           icon: Icon(icon, color: color),
-          label: Text(label,
-              style: TextStyle(
-                  color: color, fontWeight: FontWeight.w400, fontSize: 12)),
+          label: Text(
+            label,
+            style: TextStyle(
+                color: color, fontWeight: FontWeight.w400, fontSize: 12),
+          ),
         ),
       ]);
     }
@@ -173,6 +172,16 @@ class CurriculumItemsHeader extends StatelessWidget {
             ),
           ),
         ),
+        Expanded(
+          flex: 2,
+          child: Text(
+            "Assets",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -285,6 +294,10 @@ class CurricItem extends StatelessWidget {
               ),
             ],
           ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Icon(Icons.folder, color: Colors.black54),
         ),
       ],
     );
