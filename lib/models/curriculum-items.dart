@@ -31,10 +31,20 @@ class CurriculumItems {
   final String staffTerse;
   final String id;
   final Status status;
-  final Type type;
+  final String type;
   final WeekGroup weekGroup;
   final List<Id> staffIds;
   final Id driId;
+
+  String getTypeDisplayString() {
+    var translated = codeTranslated[type];
+
+    if (translated is String) {
+      return translated;
+    } else {
+      return "Item type not recognized.";
+    }
+  }
 
   factory CurriculumItems.fromJson(Map<String, dynamic> json) =>
       CurriculumItems(
@@ -45,7 +55,8 @@ class CurriculumItems {
         staffTerse: json["staff_terse"],
         id: json["id"],
         status: statusValues.map[json["status"]]!,
-        type: typeValues.map[json["type"]]!,
+        // type: typeValues.map[json["type"]]!,
+        type: json["type"],
         weekGroup: weekGroupValues.map[json["week_group"]]!,
         staffIds: List<Id>.from(json["staff_ids"].map((x) => idValues.map[x]!)),
         driId: idValues.map[json["dri_id"]]!,
@@ -79,6 +90,13 @@ final idValues = EnumValues({
   "spencer": Id.SPENCER,
   "whiskey": Id.WHISKEY
 });
+
+final codeTranslated = {
+  'A': 'Assessment',
+  'E': 'Event',
+  'L': 'Lecture',
+  'V': 'Event',
+};
 
 enum Status { PUBLISHED, RETIRED, PRIVATE }
 
