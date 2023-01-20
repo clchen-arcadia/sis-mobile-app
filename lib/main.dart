@@ -137,6 +137,11 @@ class _CohortDetailPageState extends State<CohortDetailPage> {
       children: [
         FutureCourseInfo(futureCohortData: futureCohortData),
         CurriculumItemsHeader(),
+        Divider(
+          height: 1,
+          thickness: 2,
+          color: Colors.black45,
+        ),
         FutureCurriculumItems(futureCurriculumItems: futureCurriculumItems),
       ],
     );
@@ -262,49 +267,55 @@ class CurricItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {},
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
         children: [
-          Expanded(
-            flex: 2,
-            child: Text(
-              DateFormat('EEE, MM/dd h:mm a').format(data.startAt),
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-            ),
-          ),
-          Expanded(
-            flex: 8,
-            child: InkWell(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    data.title,
-                    style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 30, 33, 222)),
-                  ),
-                  Text(
-                    "(${data.getTypeDisplayString()})",
-                    style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey),
-                  ),
-                  Text(
-                    data.description,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.w500),
-                  ),
-                ],
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Text(
+                  DateFormat('EEE, MM/dd h:mm a').format(data.startAt),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w500),
+                ),
               ),
-            ),
+              Expanded(
+                flex: 8,
+                child: InkWell(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data.title,
+                        style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 30, 33, 222)),
+                      ),
+                      Text(
+                        "(${data.getTypeDisplayString()})",
+                        style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
+                      ),
+                      Text(
+                        data.description,
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Icon(Icons.folder, color: Colors.black54),
+              ),
+            ],
           ),
-          Expanded(
-            flex: 2,
-            child: Icon(Icons.folder, color: Colors.black54),
-          ),
+          Divider(height: 1, thickness: 1),
         ],
       ),
     );
