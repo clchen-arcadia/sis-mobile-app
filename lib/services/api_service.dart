@@ -6,8 +6,6 @@ import '../models/cohort.dart';
 
 import 'package:http/http.dart' as http;
 
-//     final curriculumItems = curriculumItemsFromJson(jsonString);
-
 class ApiConstants {
   static String baseUrl = dotenv.env['API_BASE_URL'].toString();
   static String token = dotenv.env['API_TOKEN'].toString();
@@ -29,7 +27,6 @@ Future<List<CurriculumItems>> fetchCurriculumItems() async {
 
   if (response.statusCode == 200) {
     return curriculumItemsFromJson(response.body);
-    // return CurriculumItems.fromJson(jsonDecode(response.body));
   } else {
     throw Exception('Failed to load Assessment List');
   }

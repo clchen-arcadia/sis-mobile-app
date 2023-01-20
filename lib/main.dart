@@ -1,6 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
-// import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,7 +9,6 @@ import 'models/cohort.dart';
 
 Future main() async {
   await dotenv.load();
-
   runApp(MyApp());
 }
 
@@ -303,60 +301,3 @@ class DataClass extends StatelessWidget {
     );
   }
 }
-
-
-// DataTable(
-//         dataRowHeight: 50,
-//         sortColumnIndex: 1,
-//         showCheckboxColumn: false,
-//         // border: TableBorder.all(width: .5),
-//         columns: const [
-//           DataColumn(
-//             label: Text(
-//               "Date",
-//               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-//             ),
-//           ),
-//           DataColumn(
-//             label: Text(
-//               "Title",
-//               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-//             ),
-//           ),
-//           DataColumn(
-//             label: Text(
-//               "Assets",
-//               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-//             ),
-//           ),
-//         ],
-//         rows: datalist
-//             .where((data) => data.startDate.isAfter(startOfWeek))
-//             .map((data) {
-//           return DataRow(
-//             cells: [
-//               DataCell(
-//                 Text(
-//                   DateFormat('EEE, MM/dd h:mm a').format(data.startAt),
-//                   style: const TextStyle(
-//                       fontSize: 18, fontWeight: FontWeight.w500),
-//                 ),
-//               ),
-//               DataCell(
-//                 Text(
-//                   data.description,
-//                   style: const TextStyle(
-//                       fontSize: 18, fontWeight: FontWeight.w500),
-//                 ),
-//               ),
-//               DataCell(
-//                 Text(
-//                   data.type.toString(),
-//                   style: const TextStyle(
-//                       fontSize: 18, fontWeight: FontWeight.w500),
-//                 ),
-//               ),
-//             ],
-//           );
-//         }).toList(),
-//       ),
