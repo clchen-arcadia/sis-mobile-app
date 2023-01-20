@@ -143,6 +143,37 @@ class _CohortDetailPageState extends State<CohortDetailPage> {
   }
 }
 
+class FutureCourseInfo extends StatelessWidget {
+  const FutureCourseInfo({
+    Key? key,
+    required this.futureCohortData,
+  }) : super(key: key);
+
+  final Future<Cohort> futureCohortData;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Cohort>(
+      future: futureCohortData,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Container(
+              padding: const EdgeInsets.all(5),
+              child: Text('Course: [Mon, Sep 26, 2022 - Fri, Feb 3, 2023]',
+                  style: TextStyle(
+                    fontSize: 18,
+                  )));
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+}
+
+////////////////////////////////////////////////////////////////////////
+
 class CurriculumItemsHeader extends StatelessWidget {
   const CurriculumItemsHeader({
     Key? key,
@@ -183,35 +214,6 @@ class CurriculumItemsHeader extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class FutureCourseInfo extends StatelessWidget {
-  const FutureCourseInfo({
-    Key? key,
-    required this.futureCohortData,
-  }) : super(key: key);
-
-  final Future<Cohort> futureCohortData;
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<Cohort>(
-      future: futureCohortData,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Container(
-              padding: const EdgeInsets.all(5),
-              child: Text('Course: [Mon, Sep 26, 2022 - Fri, Feb 3, 2023]',
-                  style: TextStyle(
-                    fontSize: 18,
-                  )));
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
-        return const CircularProgressIndicator();
-      },
     );
   }
 }
@@ -258,48 +260,53 @@ class CurricItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          flex: 2,
-          child: Text(
-            DateFormat('EEE, MM/dd h:mm a').format(data.startAt),
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+    return InkWell(
+      onTap: () {},
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Text(
+              DateFormat('EEE, MM/dd h:mm a').format(data.startAt),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            ),
           ),
-        ),
-        Expanded(
-          flex: 8,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                data.title,
-                style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 30, 33, 222)),
+          Expanded(
+            flex: 8,
+            child: InkWell(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data.title,
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 30, 33, 222)),
+                  ),
+                  Text(
+                    "(${data.getTypeDisplayString()})",
+                    style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey),
+                  ),
+                  Text(
+                    data.description,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
+                ],
               ),
-              Text(
-                "(${data.getTypeDisplayString()})",
-                style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey),
-              ),
-              Text(
-                data.description,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
-            ],
+            ),
           ),
-        ),
-        Expanded(
-          flex: 2,
-          child: Icon(Icons.folder, color: Colors.black54),
-        ),
-      ],
+          Expanded(
+            flex: 2,
+            child: Icon(Icons.folder, color: Colors.black54),
+          ),
+        ],
+      ),
     );
   }
 }
