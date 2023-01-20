@@ -266,7 +266,7 @@ class DataClass extends StatelessWidget {
                           style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Colors.blue),
+                              color: Color.fromARGB(255, 30, 33, 222)),
                         ),
                         Text(
                           "(${data.getTypeDisplayString()})",
